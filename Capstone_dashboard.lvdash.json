@@ -1,0 +1,540 @@
+{
+  "datasets": [
+    {
+      "name": "42dad994",
+      "displayName": "active_customers_by_month_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.active_customers_by_month_mv"
+      ]
+    },
+    {
+      "name": "278c48c9",
+      "displayName": "credit_score_distribution_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.credit_score_distribution_mv"
+      ]
+    },
+    {
+      "name": "d8c61675",
+      "displayName": "customer_360_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.customer_360_mv"
+      ]
+    },
+    {
+      "name": "5c7386ef",
+      "displayName": "loan_kpi_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.loan_kpi_mv"
+      ]
+    },
+    {
+      "name": "3c733797",
+      "displayName": "customer_wealth_segment_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.customer_wealth_segment_mv"
+      ]
+    },
+    {
+      "name": "3fd3aa82",
+      "displayName": "loan_type_status_kpi_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.loan_type_status_kpi_mv"
+      ]
+    },
+    {
+      "name": "be7f74ab",
+      "displayName": "monthly_transaction_kpi_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.monthly_transaction_kpi_mv"
+      ]
+    },
+    {
+      "name": "ee2b5d5b",
+      "displayName": "transaction_kpi_mv",
+      "queryLines": [
+        "SELECT * FROM capstone_project.gold.transaction_kpi_mv"
+      ],
+      "catalog": "capstone_project",
+      "schema": "gold"
+    },
+    {
+      "name": "5cedaab6",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        "SELECT\r\n",
+        "  txn_date,\r\n",
+        "  total_transactions,\r\n",
+        "  successful_transactions,\r\n",
+        "  failed_transactions,\r\n",
+        "  failure_rate,\r\n",
+        "  online_transactions,\r\n",
+        "  branch_transactions,\r\n",
+        "  ROUND(online_transactions * 100.0 / total_transactions, 2) AS online_pct,\r\n",
+        "  ROUND(branch_transactions * 100.0 / total_transactions, 2) AS branch_pct,\r\n",
+        "  avg_amount,\r\n",
+        "  median_amount\r\n",
+        "FROM capstone_project.gold.transaction_kpi_mv\r\n",
+        "ORDER BY txn_date DESC\r\n",
+        "LIMIT 30"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "d4f088a5",
+      "displayName": "Summary",
+      "layout": [
+        {
+          "widget": {
+            "name": "f7696165",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5c7386ef",
+                  "fields": [
+                    {
+                      "name": "monthly(loan_end_date)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `loan_end_date`)"
+                    },
+                    {
+                      "name": "sum(total_loans)",
+                      "expression": "SUM(`total_loans`)"
+                    },
+                    {
+                      "name": "sum(defaulted_loans)",
+                      "expression": "SUM(`defaulted_loans`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(loan_end_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(total_loans)"
+                    },
+                    {
+                      "fieldName": "sum(defaulted_loans)"
+                    }
+                  ]
+                }
+              },
+              "frame": {
+                "title": "Monthly Active Customers",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "b923c33d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "278c48c9",
+                  "fields": [
+                    {
+                      "name": "sum(customer_count)",
+                      "expression": "SUM(`customer_count`)"
+                    },
+                    {
+                      "name": "risk_category",
+                      "expression": "`risk_category`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(customer_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "risk_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Average Annual Income by Risk Category",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 6,
+            "width": 3,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "0b1a732b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5cedaab6",
+                  "fields": [
+                    {
+                      "name": "weekly(txn_date)",
+                      "expression": "DATE_TRUNC(\"WEEK\", `txn_date`)"
+                    },
+                    {
+                      "name": "sum(online_transactions)",
+                      "expression": "SUM(`online_transactions`)"
+                    },
+                    {
+                      "name": "sum(branch_transactions)",
+                      "expression": "SUM(`branch_transactions`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "weekly(txn_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "fields": [
+                    {
+                      "fieldName": "sum(online_transactions)"
+                    },
+                    {
+                      "fieldName": "sum(branch_transactions)"
+                    }
+                  ]
+                }
+              },
+              "frame": {
+                "title": "Online vs Branch Transactions",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "e0317640",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3fd3aa82",
+                  "fields": [
+                    {
+                      "name": "sum(total_loans)",
+                      "expression": "SUM(`total_loans`)"
+                    },
+                    {
+                      "name": "loan_type",
+                      "expression": "`loan_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(total_loans)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "loan_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Loan Types Distribution",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "ce95f844",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3c733797",
+                  "fields": [
+                    {
+                      "name": "wealth_segment",
+                      "expression": "`wealth_segment`"
+                    },
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "city",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "wealth_segment",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "wealth_segment",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "frame": {
+                "title": "Customer Locations",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "253aa6fc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "be7f74ab",
+                  "fields": [
+                    {
+                      "name": "failed_transactions",
+                      "expression": "`failed_transactions`"
+                    },
+                    {
+                      "name": "monthly(month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `month`)"
+                    },
+                    {
+                      "name": "sum(total_transactions)",
+                      "expression": "SUM(`total_transactions`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(month)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_transactions)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "failed_transactions",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "frame": {
+                "title": "Total Transactions Over Time",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 10,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "b01a6dc0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "be7f74ab",
+                  "fields": [
+                    {
+                      "name": "failure_rate",
+                      "expression": "`failure_rate`"
+                    },
+                    {
+                      "name": "month",
+                      "expression": "`month`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "failure_rate",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "month",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Failure Rate Distribution",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 3,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "a114ebe2",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "ad6a38ff",
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {},
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "genieSpace": {
+      "isEnabled": false
+    }
+  }
+}
