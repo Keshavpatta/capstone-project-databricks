@@ -1,0 +1,71 @@
+{
+  "name": "capstone_pipeline",
+  "email_notifications": {
+    "on_success": [
+      "keshavpatta185@gmail.com"
+    ],
+    "on_failure": [
+      "keshavpatta185@gmail.com"
+    ],
+    "no_alert_for_skipped_runs": false
+  },
+  "webhook_notifications": {},
+  "notification_settings": {
+    "no_alert_for_skipped_runs": false,
+    "no_alert_for_canceled_runs": false
+  },
+  "timeout_seconds": 0,
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "Load_Data",
+      "run_if": "ALL_SUCCESS",
+      "pipeline_task": {
+        "pipeline_id": "ebe6a57c-1c27-4b3b-b394-cee0bf5a3b3b",
+        "full_refresh": false
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {}
+    },
+    {
+      "task_key": "Refresh_Dashboard",
+      "depends_on": [
+        {
+          "task_key": "Load_Data"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "dashboard_task": {
+        "subscription": {
+          "subscribers": [
+            {
+              "user_name": "keshavpatta185@gmail.com"
+            }
+          ],
+          "paused": true
+        },
+        "dashboard_id": "01f0a6a324da1736af2c219735ed3317"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {
+        "on_success": [
+          "keshavpatta185@gmail.com"
+        ],
+        "on_failure": [
+          "keshavpatta185@gmail.com"
+        ]
+      },
+      "notification_settings": {
+        "no_alert_for_skipped_runs": false,
+        "no_alert_for_canceled_runs": false,
+        "alert_on_last_attempt": false
+      },
+      "webhook_notifications": {}
+    }
+  ],
+  "queue": {
+    "enabled": true
+  },
+  "performance_target": "PERFORMANCE_OPTIMIZED"
+}
